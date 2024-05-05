@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"os/signal"
+	"strconv"
 	"sync"
 	"syscall"
 	"time"
 )
 
 func startWork(duration time.Duration, ch chan int, wg *sync.WaitGroup) {
-	// создаем таймаут заданной пользователем пролдолжительности
+	// Cоздаем таймаут заданной пользователем пролдолжительности
 	timeout := time.After(duration)
 
 	go func() {
@@ -30,9 +30,9 @@ func startWork(duration time.Duration, ch chan int, wg *sync.WaitGroup) {
 
 // GracefulShutdown обеспечивает корректное завершение работы программы.
 func GracefulShutdown(ch chan int, wg *sync.WaitGroup) {
-	interruptChannel := make(chan os.Signal, 1) // Создаем канал для приема сигналов прерывания
+	interruptChannel := make(chan os.Signal, 1)                      // Создаем канал для приема сигналов прерывания
 	signal.Notify(interruptChannel, syscall.SIGINT, syscall.SIGTERM) // Уведомляем, что хотим получать сигналы SIGINT и SIGTERM
-	<-interruptChannel // Ждем сигнал прерывания
+	<-interruptChannel                                               // Ждем сигнал прерывания
 
 	close(ch) // Закрываем канал данных
 	wg.Wait() // Ждем завершения всех рабочих
@@ -46,16 +46,16 @@ func usage() {
 }
 
 func main() {
-// проверяем количество аргументов объясняем пользователю, что он дал не правильный ввод
+	// проверяем количество аргументов объясняем пользователю, что он дал не правильный ввод
 	if len(os.Args) < 2 {
 		usage()
 	}
 
 	a, err := strconv.Atoi(os.Args[1])
-	if err!= nil {
+	if err != nil {
 		usage()
 	}
-	
+
 	duration := time.Duration(a) * time.Second
 
 	ch := make(chan int)
