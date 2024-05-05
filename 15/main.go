@@ -1,5 +1,5 @@
 /*
-К каким негативным последствиям может привести данный фрагмент кода, 
+К каким негативным последствиям может привести данный фрагмент кода,
 и как это исправить? Приведите корректный пример реализации.
 
 
@@ -18,7 +18,6 @@ func main() {
 чтобы это исправить можно работать с копией или создавать срез сразу при вызове функции и не хранить переменну,
 которая бы указывала на большой созданный массив и мешала бы сборщику мусора очистить память
 */
-
 
 package main
 
@@ -41,8 +40,8 @@ func createHugeString(size int) string {
 }
 
 func someFunc() {
-  v := createHugeString(1 << 10)
-  justString = v[:100]
+	v := createHugeString(1 << 10)
+	justString = v[:100]
 }
 
 func main() {
@@ -54,9 +53,9 @@ func main() {
 	runtime.ReadMemStats(&m)
 	fmt.Printf("after someFunc(): %d\n", m.Alloc/1024)
 	runtime.GC()
-	time.Sleep(4*time.Second)
+	time.Sleep(4 * time.Second)
 	fmt.Printf("after GC: %d\n", m.Alloc/1024)
-	
+
 	// Создаем подстроку непосредственно при вызове функции.
 	substring := createHugeString(1 << 10)[:10]
 	fmt.Println(substring)
@@ -70,11 +69,11 @@ func main() {
 	shortstring := make([]byte, 10)
 
 	// Используем копирование
-	copy(shortstring, createHugeString(1 << 10))
+	copy(shortstring, createHugeString(1<<10))
 	fmt.Println(string(shortstring))
 	runtime.ReadMemStats(&m)
 	fmt.Printf("after copy(shortstring, createHugeString(1 << 10)): %d\n", m.Alloc/1024)
-	
+
 	runtime.GC()
 	fmt.Printf("after GC: %d\n", m.Alloc/1024)
 
