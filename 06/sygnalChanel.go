@@ -1,5 +1,5 @@
 // Реализовать все возможные способы остановки выполнения горутины.
-//  Закрываем канал и обуславливаем этим выход из цикла
+//  Канал уведомлений
 
 package main
 
@@ -12,20 +12,22 @@ import (
 func main() {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
-	stopChan := make(chan bool)
+	//  Создаем канал для отправки уведомлений без данных
+	sygnalChan := make(chan struct{})
 
-	go print(stopChan, &wg)
+	go print(sygnalChan, &wg)
 	time.Sleep(3 * time.Second)
-	close(stopChan) // Отправляем сигнал о остановке
+	// Отправляем сигнал о остановке
+	sygnalChan <- struct{}{}
 	wg.Wait()
 }
 
-func print(stopChan <-chan bool, wg *sync.WaitGroup) {
+func print(sygnalChan <-chan struct{}, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
 		select {
-		case <-stopChan:
-			fmt.Println("Stopping after a chanel was closed")
+		case <-sygnalChan:
+			fmt.Println("Stopping after sygnal was received")
 			return
 		default:
 			fmt.Println("Printing...")
