@@ -12,7 +12,7 @@ func main() {
 	fmt.Println(a, b)
 	//  На случай, если авторы задания хотели что-то сложнее:
 	swap(a, b)
-	aORSwap(a, b)
+	XORswap(a, b)
 
 }
 
@@ -24,7 +24,7 @@ func swap(a, b int) {
 	fmt.Printf("После обмена числа: %d и %d\n", a, b)
 }
 
-func aORSwap(a, b int) {
+func XORswap(a, b int) {
 	fmt.Printf("До обмена числа: %d и %d\n", a, b)
 	a = a ^ b
 	b = a ^ b
